@@ -1,4 +1,25 @@
 from graph import Graph, Vertex, WHITE, GREY, BLACK
+import functools
+
+
+def print_path(G: Graph, s: Vertex, v: Vertex):
+    if v == s:
+        # in this case we reached the source vertex so we print it and exit
+        print(s)
+    elif v.parent is None:
+        # if we reached a node that has no parent (if we're here it also means that v is not the source s)
+        # then there's no path from s to v since we couldn't reach s by following the path of v's parents up the tree
+        print("no path from s to v")
+    else:
+        # we're at a node that has a parent but we still didn't reach s so we recurse on the parent and print the current node
+        # v after we're done processing its ancestors
+        print_path(G, s, v.parent)
+        print(v)
+
+
+'''
+    Breadth-first Search
+'''
 
 
 # a graph instance G
@@ -44,23 +65,15 @@ def bfs(G: Graph, s: Vertex):
         u.color = BLACK
 
 
-def print_path(G: Graph, s: Vertex, v: Vertex):
-    if v == s:
-        # in this case we reached the source vertex so we print it and exit
-        print(s)
-    elif v.parent is None:
-        # if we reached a node that has no parent (if we're here it also means that v is not the source s)
-        # then there's no path from s to v since we couldn't reach s by following the path of v's parents up the tree
-        print("no path from s to v")
-    else:
-        # we're at a node that has a parent but we still didn't reach s so we recurse on the parent and print the current node
-        # v after we're done processing its ancestors
-        print_path(G, s, v.parent)
-        print(v)
+'''
+    Depth-first Search
+'''
 
 time = 0
+topological_sort_order = []
 
-def dfs(G):
+
+def dfs(G: Graph):
     # we initialize every vertex in G
     for u in G.V:
         u.color = WHITE
@@ -71,7 +84,8 @@ def dfs(G):
         if u.color == WHITE:
             dfs_visit(G, u)
 
-def dfs_visit(G, u):
+
+def dfs_visit(G: Graph, u: Vertex):
     global time
 
     time = time + 1
@@ -95,3 +109,128 @@ def dfs_visit(G, u):
     time = time + 1
 
     u.finish_time = time
+
+
+'''
+    Topological Sort
+'''
+
+
+def dfs_for_topological(G: Graph):
+    # we initialize every vertex in G
+    for u in G.V:
+        u.color = WHITE
+        u.parent = None
+
+    # we dfs visit every undiscovered vertex in G
+    for u in G.V:
+        if u.color == WHITE:
+            dfs_visit_for_topological(G, u)
+
+
+def dfs_visit_for_topological(G: Graph, u: Vertex):
+    global time, topological_sort_order
+
+    time = time + 1
+
+    # we are exploring u now so we need to mark it as grey
+    u.discovery_time = time
+    u.color = GREY
+
+    u_adjacency = G.get_adjacent(u)
+
+    # now discover every edge reachable from u
+    for v in u_adjacency:
+        if v.color == WHITE:
+            # u is v's parent in the DFS tree
+            v.parent = u
+            dfs_visit_for_topological(G, v)
+
+    # we're done exploring u
+    u.color = BLACK
+
+    time = time + 1
+
+    u.finish_time = time
+
+    topological_sort_order.insert(0, u)
+
+
+def topological_sort(G: Graph):
+    global topological_sort_order
+
+    # set the is_topological to true so the function can insert the vertices
+    # into the linked list topological_sort_order
+    dfs_for_topological(G)
+
+    return topological_sort_order
+
+
+'''
+    Strongly Connected Components
+'''
+
+
+def sort_vertices_dec_finish_time(u: Vertex, v: Vertex):
+    if u.finish_time < v.finish_time:
+        return 1
+    elif u.finish_time > v.finish_time:
+        return -1
+
+    return 0
+
+
+def dfs_for_scc(G: Graph, ordered_vertices: list):
+    # we initialize every vertex in G
+    for u in ordered_vertices:
+        u.color = WHITE
+        u.parent = None
+
+    # we dfs visit every undiscovered vertex in G
+    for u in ordered_vertices:
+        if u.color == WHITE:
+            dfs_visit_for_scc(G, u)
+
+
+def dfs_visit_for_scc(G: Graph, u: Vertex):
+    global time
+
+    time = time + 1
+
+    # we are exploring u now so we need to mark it as grey
+    u.discovery_time = time
+    u.color = GREY
+
+    print(u)
+
+    u_adjacency = G.get_adjacent(u)
+
+    # now discover every edge reachable from u
+    for v in u_adjacency:
+        if v.color == WHITE:
+            # u is v's parent in the DFS tree
+            v.parent = u
+
+            dfs_visit_for_scc(G, v)
+
+            print()
+
+    # we're done exploring u
+    u.color = BLACK
+
+    time = time + 1
+
+    u.finish_time = time
+
+
+def strongly_connected_components(G: Graph):
+    dfs(G)
+
+    # sort the vertices in decreasing order of their finishing time
+    sorted_vertices = sorted(G.V.copy(), key=functools.cmp_to_key(sort_vertices_dec_finish_time))
+
+    # now we need to create G transpose
+    G_t = G.get_transpose()
+
+    # this prints the generated strongly connected components while it's computing them
+    dfs_for_scc(G_t, sorted_vertices)

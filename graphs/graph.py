@@ -73,3 +73,17 @@ class Graph:
             return list(self.E[u])
 
         return []
+
+    def get_transpose(self):
+        # we create a new graph with same vertices but reversed edges
+        G_t = Graph()
+        G_t.V = self.V.copy()
+
+        for source_vertex in self.E:
+            original_edges = self.E[source_vertex]
+
+            for destination_vertex in original_edges:
+                # create the reverse edge in the transpose graph
+                G_t.add_directed_edge(destination_vertex, source_vertex)
+
+        return G_t
