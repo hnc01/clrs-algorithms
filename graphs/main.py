@@ -1,5 +1,6 @@
 from graph import Graph, Vertex
 from algorithms import bfs, dfs, topological_sort, strongly_connected_components, print_path
+from shortest_path_algorithms import bellman_ford, dag_shortest_paths, dijkstra
 
 '''
     <-- Start: BFS Demo -->
@@ -209,9 +210,160 @@ def strongly_connected_components_demo():
     <!-- End: Strongly Connected Components Demo -->
 '''
 
+'''
+    <-- Start: Bellman Ford Demo -->
+'''
+
+
+def create_bellman_ford_demo_graph():
+    G = Graph()
+
+    s = Vertex("s")
+    t = Vertex("t")
+    y = Vertex("y")
+    x = Vertex("x")
+    z = Vertex("z")
+
+    vertices = [s, t, y, x, z]
+
+    for vertex in vertices:
+        G.add_vertex(vertex)
+
+    G.add_weighted_directed_edge(s, t, 6)
+    G.add_weighted_directed_edge(s, y, 7)
+
+    G.add_weighted_directed_edge(t, x, 5)
+    G.add_weighted_directed_edge(t, y, 8)
+    G.add_weighted_directed_edge(t, z, -4)
+
+    G.add_weighted_directed_edge(y, x, -3)
+    G.add_weighted_directed_edge(y, z, 9)
+
+    G.add_weighted_directed_edge(x, t, -2)
+
+    G.add_weighted_directed_edge(z, s, 2)
+    G.add_weighted_directed_edge(z, x, 7)
+
+    return (G, s)
+
+
+def bellman_ford_demo():
+    G, s = create_bellman_ford_demo_graph()
+
+    bellman_ford(G, s)
+
+    for vertex in G.V:
+        print(vertex)
+
+
+'''
+    <!-- End: Bellman Ford Demo -->
+'''
+
+'''
+    <-- Start: DAG Shortest Path Demo -->
+'''
+
+
+def create_dag_shortest_path_demo_graph():
+    G = Graph()
+
+    r = Vertex('r')
+    s = Vertex('s')
+    t = Vertex('t')
+    x = Vertex('x')
+    y = Vertex('y')
+    z = Vertex('z')
+
+    vertices = [r, s, t, x, y, z]
+
+    for vertex in vertices:
+        G.add_vertex(vertex)
+
+    G.add_weighted_directed_edge(r, s, 5)
+    G.add_weighted_directed_edge(r, t, 3)
+
+    G.add_weighted_directed_edge(s, x, 6)
+    G.add_weighted_directed_edge(s, t, 2)
+
+    G.add_weighted_directed_edge(t, x, 7)
+    G.add_weighted_directed_edge(t, y, 4)
+    G.add_weighted_directed_edge(t, z, 2)
+
+    G.add_weighted_directed_edge(x, z, 1)
+    G.add_weighted_directed_edge(x, y, -1)
+
+    G.add_weighted_directed_edge(y, z, -2)
+
+    return G, s
+
+
+def dag_shortest_path_demo():
+    G, s = create_dag_shortest_path_demo_graph()
+
+    dag_shortest_paths(G, s)
+
+    for vertex in G.V:
+        print(vertex)
+
+
+'''
+    <!-- End: DAG Shortest Path Demo -->
+'''
+
+'''
+    <-- Start: Dijkstra's Shortest Path Demo -->
+'''
+
+
+def create_dijkstra_shortest_path_demo_graph():
+    G = Graph()
+
+    s = Vertex('s')
+    t = Vertex('t')
+    y = Vertex('y')
+    x = Vertex('x')
+    z = Vertex('z')
+
+    vertices = [s, t, x, y, z]
+
+    for vertex in vertices:
+        G.add_vertex(vertex)
+
+    G.add_weighted_directed_edge(s, t, 10)
+    G.add_weighted_directed_edge(s, y, 5)
+
+    G.add_weighted_directed_edge(t, y, 2)
+    G.add_weighted_directed_edge(t, x, 1)
+
+    G.add_weighted_directed_edge(y, t, 3)
+    G.add_weighted_directed_edge(y, x, 9)
+    G.add_weighted_directed_edge(y, z, 2)
+
+    G.add_weighted_directed_edge(x, z, 4)
+
+    G.add_weighted_directed_edge(z, s, 7)
+    G.add_weighted_directed_edge(z, x, 6)
+
+    return G, s
+
+
+def dijkstra_shortest_path_demo():
+    G, s = create_dijkstra_shortest_path_demo_graph()
+
+    dijkstra(G, s)
+
+    for vertex in G.V:
+        print(vertex)
+
+
+'''
+    <!-- End: Dijkstra's Shortest Path Demo -->
+'''
+
 
 def main():
-    strongly_connected_components_demo()
+    dijkstra_shortest_path_demo()
 
 
 if __name__ == "__main__":

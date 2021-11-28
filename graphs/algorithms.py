@@ -52,7 +52,7 @@ def bfs(G: Graph, s: Vertex):
         # can be explored next
         u_adjacency = G.get_adjacent(u)
 
-        for v in u_adjacency:
+        for v, w in u_adjacency:
             # this guarantees that we don't re-explore discovered or explored vertices
             if v.color == WHITE:
                 v.color = GREY
@@ -97,7 +97,7 @@ def dfs_visit(G: Graph, u: Vertex):
     u_adjacency = G.get_adjacent(u)
 
     # now discover every edge reachable from u
-    for v in u_adjacency:
+    for v, w in u_adjacency:
         if v.color == WHITE:
             # u is v's parent in the DFS tree
             v.parent = u
@@ -140,7 +140,7 @@ def dfs_visit_for_topological(G: Graph, u: Vertex):
     u_adjacency = G.get_adjacent(u)
 
     # now discover every edge reachable from u
-    for v in u_adjacency:
+    for v, w in u_adjacency:
         if v.color == WHITE:
             # u is v's parent in the DFS tree
             v.parent = u
@@ -206,7 +206,7 @@ def dfs_visit_for_scc(G: Graph, u: Vertex):
     u_adjacency = G.get_adjacent(u)
 
     # now discover every edge reachable from u
-    for v in u_adjacency:
+    for v, w in u_adjacency:
         if v.color == WHITE:
             # u is v's parent in the DFS tree
             v.parent = u

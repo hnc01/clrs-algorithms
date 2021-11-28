@@ -54,8 +54,8 @@ class Graph:
                 self.E[v] = set()
 
             # we add both edges because we are working now with an undirected graph
-            self.E[u].add(v)
-            self.E[v].add(u)
+            self.E[u].add((v, 1))
+            self.E[v].add((u, 1))
 
     # adds a directed edge from u to v
     def add_directed_edge(self, u: Vertex, v: Vertex):
@@ -64,7 +64,15 @@ class Graph:
                 self.E[u] = set()
 
             # we add both edges because we are working now with an undirected graph
-            self.E[u].add(v)
+            self.E[u].add((v, 1))
+
+    # add a weighted directed edge from u to v with weight
+    def add_weighted_directed_edge(self, u: Vertex, v: Vertex, weight):
+        if u in self.V and v in self.V:
+            if u not in self.E:
+                self.E[u] = set()
+
+            self.E[u].add((v, weight))
 
     # returns list of vertices adjacent to u in the graph
     def get_adjacent(self, u):
