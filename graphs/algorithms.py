@@ -70,7 +70,6 @@ def bfs(G: Graph, s: Vertex):
 '''
 
 time = 0
-topological_sort_order = []
 
 
 def dfs(G: Graph):
