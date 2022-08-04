@@ -188,6 +188,7 @@ def dfs_for_scc(G: Graph, ordered_vertices: list):
     # we dfs visit every undiscovered vertex in G
     for u in ordered_vertices:
         if u.color == WHITE:
+            print(u)
             dfs_visit_for_scc(G, u)
 
 
@@ -200,7 +201,7 @@ def dfs_visit_for_scc(G: Graph, u: Vertex):
     u.discovery_time = time
     u.color = GREY
 
-    print(u)
+    # print(u)
 
     u_adjacency = G.get_adjacent(u)
 

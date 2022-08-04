@@ -363,7 +363,7 @@ def dijkstra_shortest_path_demo():
 
 
 def main():
-    dijkstra_shortest_path_demo()
+    strongly_connected_components_demo()
 
 
 if __name__ == "__main__":

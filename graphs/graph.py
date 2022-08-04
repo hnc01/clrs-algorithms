@@ -92,6 +92,7 @@ class Graph:
 
             for destination_vertex in original_edges:
                 # create the reverse edge in the transpose graph
+                # TODO solve issue where we need to map old vertices to new vertices otherwise add_directed_edge wont add the eges
                 G_t.add_directed_edge(destination_vertex, source_vertex)
 
         return G_t
